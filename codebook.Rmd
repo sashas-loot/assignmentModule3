@@ -1,0 +1,57 @@
+---
+title: "CodeBook"
+author: "Sasha"
+date: "8/17/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Assignment 3 CodeBook  
+
+Variable descriptions are to be found in "features_info.txt" with a much more precise summary,
+than I could give you in this moment.  
+
+Here a description of my code:  
+
+First we read in all relevant data with read.table:
+```
+names <- read.table("features.txt")
+y_train <- read.table("y_train.txt")
+y_test <- read.table("y_test.txt")
+X_test <- read.table("X_test.txt", col.names = names$V2)
+X_train <- read.table("X_train.txt", col.names = names$V2)
+```
+I included the features.txt, to integrate the corresponding column names directly in the 
+reading function.  
+
+Next, I merge the different data frames with cbind/rbind: 
+```
+test <- cbind(y_test, X_test)
+train <- cbind(y_train, X_train)
+full_data <- rbind(test, train)
+```
+
+For a tidy dataset I just want the relevant data:
+```
+# grep gets me the right columns with a certain regex
+my_data <- full_data[,grep("(mean)|(std)", names(full_data))]
+# cbind the activities 
+my_data <- cbind(full_data$V1, my_data)
+# rename activity column
+my_data <- rename(my_data, "Activity" = "full_data$V1")
+```
+
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
